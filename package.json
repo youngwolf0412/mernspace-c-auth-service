@@ -15,7 +15,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "node src/server.js"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "typescript": "^5.8.2"
   }
 }
