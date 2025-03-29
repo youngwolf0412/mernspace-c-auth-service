@@ -35,8 +35,8 @@
   },
   "lint-staged": {
     "*.ts": [
-      "prettier --write",
-      "eslint --fix"
+      "npm run format:fix",
+      "npm run lint:fix"
     ]
   }
 }

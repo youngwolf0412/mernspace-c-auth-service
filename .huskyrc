@@ -1,5 +1,0 @@
-{
-  "hooks": {
-    "pre-commit": "powershell.exe -Command \"npx lint-staged\""
-  }
-} 
