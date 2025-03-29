@@ -1,9 +1,16 @@
-function welcome(name: string) {
-  console.log(`welcome ${name}`);
-  const user = {
-    name: "Rakesh",
-  };
-  const fname = user.name;
-  return name + fname;
-}
-welcome("Rakesh");
+import app from "./app";
+import { Config } from "./config";
+
+const startServer = () => {
+  const PORT = Config.PORT;
+  try {
+    app.listen(PORT, () => {
+      console.log(`listening on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Error starting server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();

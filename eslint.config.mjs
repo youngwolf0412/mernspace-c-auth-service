@@ -15,6 +15,15 @@ export default tseslint.config(
     rules: {
       // "no-console": "error",
       // "dot-notation": "error",
+      "no-unused-vars": "off",
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          varsIgnorePattern: "^NODE_ENV$", // Ignore NODE_ENV variable
+          argsIgnorePattern: "^_", // Ignore parameters starting with underscore
+          ignoreRestSiblings: true, // Ignore rest properties
+        },
+      ],
     },
   },
 );
