@@ -15,10 +15,10 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "dev": "node src/server.js",
-    "format:fix": "prettier . --write",
+    "dev": "node src/server.ts",
+    "format:fix": "prettier --write .",
     "lint:check": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint --fix .",
     "format:check": "prettier . --check",
     "prepare": "husky"
   },
@@ -35,9 +35,8 @@
   },
   "lint-staged": {
     "*.ts": [
-      "npm run format:fix",
-      "npm run lint:fix",
-      "eslint"
+      "prettier --write",
+      "eslint --fix"
     ]
   }
 }
