@@ -4,11 +4,11 @@ import logger from "./config/logger";
 
 const app = express();
 
-app.get("/", async (req, res, next) => {
-  const error = createHttpError(401, "You cannnot access this route");
+app.get("/", (req, res, next) => {
+  // const error = createHttpError(401, "You cannnot access this route");
   // throw error;
-  next(error);
-  // res.send("Hello World!");
+  // next(error);
+  res.send("Hello World!");
 });
 
 // gloal error handler
