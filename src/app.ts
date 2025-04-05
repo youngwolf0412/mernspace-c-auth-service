@@ -7,6 +7,8 @@ import authRouter from "./routes/auth";
 
 const app = express();
 
+app.use(express.json()); // Middleware to parse JSON bodies
+
 app.get("/", (req, res, next) => {
   // const error = createHttpError(401, "You cannnot access this route");
   // throw error;
