@@ -1,3 +1,4 @@
+import "reflect-metadata"; // We need this to use @decorators in TypeORM
 import express, { NextFunction, Request, Response } from "express";
 import createHttpError, { HttpError } from "http-errors";
 import logger from "./config/logger";
