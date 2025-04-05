@@ -17,6 +17,23 @@ describe("POST /auth/register", () => {
       // Assert
       expect(response.statusCode).toBe(201);
     });
+
+    it("should return json", async () => {
+      // AAA
+      // Arrange
+      const userData = {
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@gmail.com",
+        password: "password123",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+      // Assert
+      expect(response.header["content-type"]).toEqual(
+        expect.stringContaining("json"),
+      );
+    });
   });
   describe("happy path", () => {});
 });
