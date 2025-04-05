@@ -71,8 +71,11 @@ describe("POST /auth/register", () => {
       const response = await request(app).post("/auth/register").send(userData);
       // Assert
       const userRepository = connection.getRepository(User);
-      const user = await userRepository.find();
-      expect(user.length).toBe(1); // Check if one user is created
+      const users = await userRepository.find();
+      expect(users.length).toBe(1); // Check if one user is created
+      expect(users[0].firstName).toBe(userData.firstName); // Check if the first name is correct
+      expect(users[0].lastName).toBe(userData.lastName); // Check if the last name is correct
+      expect(users[0].email).toBe(userData.email); // Check if the email is correct
     });
   });
   describe("happy path", () => {});
