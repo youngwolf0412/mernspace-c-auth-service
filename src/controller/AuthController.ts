@@ -26,6 +26,7 @@ export class AuthController {
       email,
       password,
     });
+    await this.userService.getId;
     res.status(201).json();
   }
 }
