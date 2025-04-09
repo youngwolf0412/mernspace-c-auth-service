@@ -16,7 +16,7 @@ export const AppDataSource = new DataSource({
   // and it will create the tables again
   // and it will create the tables again
   // and it will create the tables again
-  synchronize: Config.NODE_ENV === "test" || Config.NODE_ENV === "dev",
+  synchronize: false,
   logging: false,
   entities: [User],
   migrations: [],

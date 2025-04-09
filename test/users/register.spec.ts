@@ -4,6 +4,7 @@ import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { User } from "../../src/entity/User";
 import { truncateTables } from "../utils";
+import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
   let connection: DataSource;
@@ -14,8 +15,8 @@ describe("POST /auth/register", () => {
   });
 
   beforeEach(async () => {
-    // Clear the database before each test
-    await truncateTables(connection);
+    await connection.dropDatabase(); // Drop the database before each test
+    await connection.synchronize(); // Recreate the database schema
   });
 
   afterAll(async () => {
@@ -95,6 +96,24 @@ describe("POST /auth/register", () => {
       const repository = connection.getRepository(User);
       const users = await repository.find();
       expect((response.body as Record<string, string>).id).toBe(users[0].id);
+    });
+
+    it("should assign a customer role", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh@mern.space",
+        password: "password",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users[0]).toHaveProperty("role"); // Check if the role property exists
+      expect(users[0].role).toBe(Roles.CUSTOMER); // Check if the role is correct
     });
   });
   describe("happy path", () => {});
