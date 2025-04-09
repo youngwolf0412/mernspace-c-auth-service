@@ -90,6 +90,7 @@ describe("POST /auth/register", () => {
       const response = await request(app).post("/auth/register").send(userData);
 
       // Assert
+
       expect(response.body).toHaveProperty("id");
       const repository = connection.getRepository(User);
       const users = await repository.find();
