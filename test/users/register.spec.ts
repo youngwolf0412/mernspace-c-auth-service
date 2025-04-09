@@ -81,7 +81,6 @@ describe("POST /auth/register", () => {
     it("should return an id of the created user", async () => {
       // Arrange
       const userData = {
-        // user data to be sent in the request body
         firstName: "Rakesh",
         lastName: "K",
         email: "rakesh@mern.space",

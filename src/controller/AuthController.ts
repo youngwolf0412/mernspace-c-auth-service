@@ -4,15 +4,13 @@ import { RegisterUserRequest } from "../types";
 
 // written controller class for authentication
 export class AuthController {
-  // userService is an instance of UserService class
-  // which is used to interact with the database
+  // userService is a property of the AuthController class
   userService: UserService;
 
   // constructor is used to initialize the userService instance
   // when the AuthController class is instantiated
   constructor(userService: UserService) {
-    // userService is an instance of UserService class
-    this.userService = new UserService();
+    this.userService = userService;
   }
 
   async register(req: RegisterUserRequest, res: Response) {
@@ -26,7 +24,7 @@ export class AuthController {
       email,
       password,
     });
-    await this.userService.getId;
+
     res.status(201).json();
   }
 }
