@@ -24,6 +24,8 @@ describe("POST /auth/register", () => {
     await connection.destroy();
   });
 
+  // given all fields means that the user is providing all the required fields in the request body
+  // and the server is expected to create a new user in the database
   describe("given all fields", () => {
     it("should return 201 status code", async () => {
       // AAA
@@ -68,7 +70,7 @@ describe("POST /auth/register", () => {
       };
       // Act
       // Make a request to the endpoint
-      // This will trigger the registration process and save the user in the database
+      // This will trigger the registration process
       const response = await request(app).post("/auth/register").send(userData);
       // Assert
       const userRepository = connection.getRepository(User);
@@ -95,7 +97,7 @@ describe("POST /auth/register", () => {
       expect(response.body).toHaveProperty("id");
       const repository = connection.getRepository(User);
       const users = await repository.find();
-      expect((response.body as Record<string, string>).id).toBe(users[0].id);
+      expect((response.body as Record<string, string>).id).toBe(users[0].id); //jo id database me gyi wahi id response me bhejo, ye expectation hai
     });
 
     it("should assign a customer role", async () => {
@@ -114,6 +116,23 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
       expect(users[0]).toHaveProperty("role"); // Check if the role property exists
       expect(users[0].role).toBe(Roles.CUSTOMER); // Check if the role is correct
+    });
+
+    it("should store the hashed password in the database", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh@mern.space",
+        password: "password",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users[0].password).not.toBe(userData.password); // Check if the password is hashed
     });
   });
   describe("happy path", () => {});

@@ -16,6 +16,7 @@ app.get("/", (req, res, next) => {
   res.send("Hello World!");
 });
 
+// saaari baat abhi iss route pe kya hoga vo kaam kar rha hu
 app.use("/auth", authRouter);
 
 // gloal error handler
