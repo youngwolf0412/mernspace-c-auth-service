@@ -26,7 +26,7 @@ describe("POST /auth/register", () => {
 
   // given all fields means that the user is providing all the required fields in the request body
   // and the server is expected to create a new user in the database
-  describe("given all fields", () => {
+  describe("Given All Fields", () => {
     it("should return 201 status code", async () => {
       // AAA
       // Arrange
@@ -155,8 +155,10 @@ describe("POST /auth/register", () => {
       expect(users).toHaveLength(1); // Check if the number of users is still 1
     });
   });
+
+  // when the user is not providing all the required fields in the request body
   describe("Fields are missing", () => {
-    it("shoudl return 400 if email is missing", async () => {
+    it("should return 400 if email is missing", async () => {
       // Arrange
       const userData = {
         firstName: "John",
@@ -166,8 +168,13 @@ describe("POST /auth/register", () => {
       };
       // Act
       const response = await request(app).post("/auth/register").send(userData);
+      console.log(response.body);
+
       // Assert
       expect(response.statusCode).toBe(400);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users.length).toBe(0); // Check if no user is created
     });
   });
 });

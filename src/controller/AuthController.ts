@@ -3,8 +3,8 @@ import { UserService } from "../services/UserService";
 import { RegisterUserRequest } from "../types";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
+import { validationResult } from "express-validator";
 
-// written controller class for authentication
 export class AuthController {
   // userService is a property of the AuthController class
   userService: UserService;
@@ -19,15 +19,14 @@ export class AuthController {
   }
 
   async register(req: RegisterUserRequest, res: Response, next: NextFunction) {
+    const result = validationResult(req);
+    // check if there are validation errors
+    // if there are, return a 400 response with the errors
+    if (!result.isEmpty()) {
+      return res.status(400).json({ errors: result.array() });
+    }
     // get the user data from the request body
     const { firstName, lastName, email, password } = req.body;
-
-    // check if the user data is valid
-    if (!firstName || !lastName || !email || !password) {
-      const err = createHttpError(400, "All fields are required");
-      next(err);
-      return;
-    }
 
     this.logger.debug("New request to register a user", {
       firstName,
