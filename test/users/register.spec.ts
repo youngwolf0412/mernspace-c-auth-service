@@ -163,12 +163,67 @@ describe("POST /auth/register", () => {
       const userData = {
         firstName: "John",
         lastName: "Doe",
-        email: "",
+        email: "ema",
+        password: "password123",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      expect(response.statusCode).toBe(400);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users.length).toBe(0); // Check if no user is created
+    });
+
+    it("should return 400 if firstName is missing", async () => {
+      // Arrange
+      const userData = {
+        firstName: "",
+        lastName: "Doe",
+        email: "john@email.com",
         password: "password123",
       };
       // Act
       const response = await request(app).post("/auth/register").send(userData);
       console.log(response.body);
+
+      // Assert
+      expect(response.statusCode).toBe(400);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users.length).toBe(0); // Check if no user is created
+    });
+
+    it("Should return 400 status code if lastName is missing", async () => {
+      // Arrange
+      const userData = {
+        firstName: "John",
+        lastName: "",
+        email: "john@email.com",
+        password: "password123",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      expect(response.statusCode).toBe(400);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users.length).toBe(0); // Check if no user is created
+    });
+
+    it("Should return 400 status code if password is missing", async () => {
+      // Arrange
+      const userData = {
+        firstName: "John",
+        lastName: "Doe",
+        email: "john@email.com",
+        password: "",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
 
       // Assert
       expect(response.statusCode).toBe(400);
@@ -194,6 +249,60 @@ describe("POST /auth/register", () => {
       const users = await userRepository.find();
 
       expect(users[0].email).toBe("john@ewmail.com");
+    });
+
+    it("should return 400 status code if email is not a valid email", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh_mern.space", // Invalid email
+        password: "password",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      expect(response.statusCode).toBe(400);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
+    });
+
+    it("should return 400 status code if password length is less than 8 chars", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh@mern.space",
+        password: "pass", // less than 8 chars
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      expect(response.statusCode).toBe(400);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+      expect(users).toHaveLength(0);
+    });
+
+    it("shoud return an array of error messages if email is missing", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "",
+        password: "password",
+      };
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+
+      // Assert
+      expect(response.body).toHaveProperty("errors");
+      expect(
+        (response.body as Record<string, string>).errors.length,
+      ).toBeGreaterThan(0);
     });
   });
 });
