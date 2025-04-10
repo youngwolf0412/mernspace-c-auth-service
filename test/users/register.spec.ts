@@ -3,7 +3,7 @@ import app from "../../src/app";
 import { DataSource } from "typeorm";
 import { AppDataSource } from "../../src/config/data-source";
 import { User } from "../../src/entity/User";
-import { truncateTables } from "../utils";
+
 import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
@@ -133,7 +133,27 @@ describe("POST /auth/register", () => {
       const userRepository = connection.getRepository(User);
       const users = await userRepository.find();
       expect(users[0].password).not.toBe(userData.password); // Check if the password is hashed
+      expect(users[0].password).toHaveLength(60); // Check if the hashed password has a length of 60 characters
+      expect(users[0].password).toMatch(/^\$2[a|b]\$\d+\$/); // Check if the password is hashed using bcrypt
+    });
+
+    it("should return 400 status code if the email is already in use", async () => {
+      // Arrange
+      const userData = {
+        firstName: "Rakesh",
+        lastName: "K",
+        email: "rakesh@mern.space",
+        password: "password",
+      };
+      const userRepository = connection.getRepository(User);
+      await userRepository.save({ ...userData, role: Roles.CUSTOMER }); // Save the user to the database
+      // Act
+      const response = await request(app).post("/auth/register").send(userData);
+      const users = await userRepository.find(); // Fetch all users from the database
+      // Assert
+      expect(response.statusCode).toBe(400); // Check if the status code is 400
+      expect(users).toHaveLength(1); // Check if the number of users is still 1
     });
   });
-  describe("happy path", () => {});
+  describe("Fields are missing", () => {});
 });
