@@ -17,7 +17,7 @@ export const AppDataSource = new DataSource({
   // and it will create the tables again
   // and it will create the tables again
   // and it will create the tables again
-  synchronize: false,
+  synchronize: true,
   logging: false,
   entities: [User, RefreshToken],
   migrations: [],

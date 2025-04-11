@@ -1,12 +1,11 @@
 import fs from "fs";
-import path from "path";
-import { JwtPayload, sign } from "jsonwebtoken";
 import createHttpError from "http-errors";
+import { JwtPayload, sign } from "jsonwebtoken";
+import path from "path";
 import { Config } from "../config";
 import { AppDataSource } from "../config/data-source";
-import { User } from "../entity/User";
 import { RefreshToken } from "../entity/RefreshToken";
-import { Repository } from "typeorm";
+import { User } from "../entity/User";
 
 export class TokenService {
   generateAccessToken(payload: JwtPayload) {

@@ -1,12 +1,10 @@
 import { NextFunction, Response } from "express";
 import { validationResult } from "express-validator";
-import { JwtPayload, sign } from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
-import { Config } from "../config";
-import { AppDataSource } from "../config/data-source";
+import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
 import { RegisterUserRequest } from "../types";
-import { TokenService } from "../services/TokenService";
 
 export class AuthController {
   // userService is a property of the AuthController class
