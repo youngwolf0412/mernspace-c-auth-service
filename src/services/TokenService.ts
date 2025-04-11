@@ -3,6 +3,10 @@ import path from "path";
 import { JwtPayload, sign } from "jsonwebtoken";
 import createHttpError from "http-errors";
 import { Config } from "../config";
+import { AppDataSource } from "../config/data-source";
+import { User } from "../entity/User";
+import { RefreshToken } from "../entity/RefreshToken";
+import { Repository } from "typeorm";
 
 export class TokenService {
   generateAccessToken(payload: JwtPayload) {
@@ -31,5 +35,14 @@ export class TokenService {
     });
 
     return refreshToken;
+  }
+  async persistRefreshToken(user: User) {
+    const MS_IN_A_YEAR = 1000 * 60 * 60 * 24 * 365;
+    const refreshTokenRepository = AppDataSource.getRepository(RefreshToken);
+    const newRefreshToken = await refreshTokenRepository.save({
+      user: user,
+      expiresAt: new Date(Date.now() + MS_IN_A_YEAR),
+    });
+    return newRefreshToken;
   }
 }
