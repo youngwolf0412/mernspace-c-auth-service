@@ -26,4 +26,9 @@ export class UserService {
       role: Roles.CUSTOMER,
     });
   }
+
+  async findByEmail(email: string) {
+    const userRepository = AppDataSource.getRepository(User);
+    return await userRepository.findOne({ where: { email } });
+  }
 }
