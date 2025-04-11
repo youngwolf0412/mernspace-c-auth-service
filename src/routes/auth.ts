@@ -3,11 +3,13 @@ import logger from "../config/logger";
 import { AuthController } from "../controller/AuthController";
 import { UserService } from "../services/UserService";
 import registerValidator from "../validators/register-validator";
+import { TokenService } from "../services/TokenService";
 
 const router = Router();
 // userService is an instance of UserService class
 const userService = new UserService();
-const authController = new AuthController(userService, logger);
+const tokenService = new TokenService();
+const authController = new AuthController(userService, logger, tokenService);
 
 router.post(
   "/register",
