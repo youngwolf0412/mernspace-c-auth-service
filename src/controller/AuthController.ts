@@ -4,7 +4,9 @@ import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
-import { RegisterUserRequest } from "../types";
+import { LoginUserRequest, RegisterUserRequest } from "../types";
+import createHttpError from "http-errors";
+import { CredentialService } from "../services/CredentialService";
 
 export class AuthController {
   // userService is a property of the AuthController class
@@ -16,6 +18,7 @@ export class AuthController {
     userService: UserService,
     private logger: Logger,
     private tokenService: TokenService,
+    private credentialService: CredentialService,
   ) {
     this.userService = userService;
   }
@@ -76,6 +79,76 @@ export class AuthController {
         httpOnly: true,
       });
 
+      res.status(201).json({ id: user.id });
+    } catch (error) {
+      next(error);
+      return;
+    }
+  }
+
+  async login(req: LoginUserRequest, res: Response, next: NextFunction) {
+    const result = validationResult(req);
+    // check if there are validation errors
+    // if there are, return a 400 response with the errors
+    if (!result.isEmpty()) {
+      return res.status(400).json({ errors: result.array() });
+    }
+    const { email, password } = req.body;
+
+    this.logger.debug("New request to login a user", {
+      email,
+      password: "******",
+    });
+
+    // check if email exists in the database
+    try {
+      const user = await this.userService.findByEmail(email);
+      if (!user) {
+        const error = createHttpError(400, "Email or password not match");
+        next(error);
+        return;
+      }
+      // check if password is correct
+
+      const passwordMatch = await this.credentialService.comparePassword(
+        password,
+        user.password,
+      );
+      if (!passwordMatch) {
+        const error = createHttpError(400, "Email or password not match");
+        next(error);
+        return;
+      }
+
+      // generate access token and refresh token
+      const payload: JwtPayload = {
+        sub: String(user.id),
+        role: user.role,
+      };
+
+      const accessToken = this.tokenService.generateAccessToken(payload);
+      // persist the refresh token in the database
+      const newRefreshToken = await this.tokenService.persistRefreshToken(user);
+
+      const refreshToken = this.tokenService.generateRefreshToken({
+        ...payload,
+        id: newRefreshToken.id,
+      });
+
+      res.cookie("accessToken", accessToken, {
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60, //1h
+        httpOnly: true,
+      });
+
+      res.cookie("refreshToken", refreshToken, {
+        domain: "localhost",
+        sameSite: "strict",
+        maxAge: 1000 * 60 * 60 * 24 * 365, //1y
+        httpOnly: true,
+      });
+      this.logger.info("User logged in successfully", { id: user.id });
       res.status(201).json({ id: user.id });
     } catch (error) {
       next(error);
