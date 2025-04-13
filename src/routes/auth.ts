@@ -12,6 +12,8 @@ import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
 import validateRefreshToken from "../middlewares/validateRefreshToken";
 
+import parseRefreshToken from "../controller/parseRefreshToken";
+
 const router = Router();
 // userService is an instance of UserService class
 const userRepository = AppDataSource.getRepository(User);
@@ -57,4 +59,11 @@ router.post(
     authController.refresh(req as AuthRequest, res, next),
 );
 
+router.post(
+  "/logout",
+  authenticate,
+  parseRefreshToken,
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.logout(req as AuthRequest, res, next),
+);
 export default router;
