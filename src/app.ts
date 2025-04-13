@@ -8,6 +8,8 @@ import { cookie } from "express-validator";
 import cookieParser from "cookie-parser";
 
 const app = express();
+app.use(express.static("public"));
+
 app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.json()); // Middleware to parse JSON bodies
 
@@ -23,7 +25,7 @@ app.use("/auth", authRouter);
 
 // gloal error handler
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
-  const statusCode = err.status || 500;
+  const statusCode = err.statusCode || err.status || 500;
   logger.error(err.message, {
     statusCode,
   });
