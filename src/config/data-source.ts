@@ -13,13 +13,9 @@ export const AppDataSource = new DataSource({
   database: Config.DB_NAME,
 
   // Don't set this to true in production!
-  // It will drop all your data every time you run the app
-  // and it will create the tables again
-  // and it will create the tables again
-  // and it will create the tables again
-  synchronize: true,
+  synchronize: false,
   logging: false,
   entities: [User, RefreshToken],
-  migrations: [],
+  migrations: ["src/migration/*.ts"],
   subscribers: [],
 });

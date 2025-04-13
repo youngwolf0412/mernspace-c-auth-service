@@ -1,6 +1,8 @@
 import { config } from "dotenv";
 import path from "path";
-config({ path: path.join(__dirname, `../../.env.${process.env.NODE_ENV}`) }); // Load environment variables from .env.test or .env.dev or .env.prod file
+config({
+  path: path.join(__dirname, `../../.env.${process.env.NODE_ENV || "dev"}`),
+}); // Load environment variables from .env.test or .env.dev or .env.prod file
 
 const {
   PORT,
