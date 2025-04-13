@@ -4,24 +4,21 @@ import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
-import { LoginUserRequest, RegisterUserRequest } from "../types";
+import { AuthRequest, LoginUserRequest, RegisterUserRequest } from "../types";
 import createHttpError from "http-errors";
 import { CredentialService } from "../services/CredentialService";
 
 export class AuthController {
   // userService is a property of the AuthController class
-  userService: UserService;
 
   // constructor is used to initialize the userService instance
   // when the AuthController class is instantiated
   constructor(
-    userService: UserService,
+    private userService: UserService,
     private logger: Logger,
     private tokenService: TokenService,
     private credentialService: CredentialService,
-  ) {
-    this.userService = userService;
-  }
+  ) {}
 
   async register(req: RegisterUserRequest, res: Response, next: NextFunction) {
     const result = validationResult(req);
@@ -100,8 +97,8 @@ export class AuthController {
       password: "******",
     });
 
-    // check if email exists in the database
     try {
+      // check if email exists in the database
       const user = await this.userService.findByEmail(email);
       if (!user) {
         const error = createHttpError(400, "Email or password not match");
@@ -109,7 +106,6 @@ export class AuthController {
         return;
       }
       // check if password is correct
-
       const passwordMatch = await this.credentialService.comparePassword(
         password,
         user.password,
@@ -154,5 +150,15 @@ export class AuthController {
       next(error);
       return;
     }
+  }
+
+  async self(req: AuthRequest, res: Response) {
+    // console.log("self called", req.auth.sub);
+
+    const user = await this.userService.findById(Number(req.auth.sub));
+    console.log("user data", user);
+
+    res.json(user);
+    // res.json({});
   }
 }

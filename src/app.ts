@@ -4,9 +4,11 @@ import createHttpError, { HttpError } from "http-errors";
 import logger from "./config/logger";
 
 import authRouter from "./routes/auth";
+import { cookie } from "express-validator";
+import cookieParser from "cookie-parser";
 
 const app = express();
-
+app.use(cookieParser()); // Middleware to parse cookies
 app.use(express.json()); // Middleware to parse JSON bodies
 
 app.get("/", (req, res, next) => {

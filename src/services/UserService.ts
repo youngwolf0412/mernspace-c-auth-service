@@ -4,8 +4,11 @@ import { Roles } from "../constants";
 import { User } from "../entity/User";
 import { UserData } from "../types";
 import bcrypt from "bcrypt";
+import { Repository } from "typeorm";
 
 export class UserService {
+  constructor(private userRepository: Repository<User>) {}
+
   async create({ firstName, lastName, email, password }: UserData) {
     const userRepository = AppDataSource.getRepository(User);
 
@@ -30,5 +33,10 @@ export class UserService {
   async findByEmail(email: string) {
     const userRepository = AppDataSource.getRepository(User);
     return await userRepository.findOne({ where: { email } });
+  }
+
+  async findById(id: number) {
+    // console.log(userRepository);
+    return await this.userRepository.findOne({ where: { id } });
   }
 }

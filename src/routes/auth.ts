@@ -6,10 +6,16 @@ import registerValidator from "../validators/register-validator";
 import { TokenService } from "../services/TokenService";
 import loginValidator from "../validators/login-validator";
 import { CredentialService } from "../services/CredentialService";
+import authenticate from "../middlewares/authenticate";
+import { AuthRequest } from "../types";
+import { AppDataSource } from "../config/data-source";
+import { User } from "../entity/User";
 
 const router = Router();
 // userService is an instance of UserService class
-const userService = new UserService();
+const userRepository = AppDataSource.getRepository(User);
+
+const userService = new UserService(userRepository);
 const tokenService = new TokenService();
 const credentialService = new CredentialService();
 const authController = new AuthController(
@@ -34,6 +40,13 @@ router.post(
   async (req: Request, res: Response, next: NextFunction) => {
     await authController.login(req, res, next);
   },
+);
+
+// this route is now a protected route
+// it requires authentication to access it
+
+router.get("/self", authenticate, (req: Request, res: Response) =>
+  authController.self(req as AuthRequest, res),
 );
 
 export default router;

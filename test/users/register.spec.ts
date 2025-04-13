@@ -253,7 +253,7 @@ describe("POST /auth/register", () => {
       };
       // Act
       const response = await request(app).post("/auth/register").send(userData);
-      console.log(response.body);
+      // console.log(response.body);
 
       // Assert
       expect(response.statusCode).toBe(400);
