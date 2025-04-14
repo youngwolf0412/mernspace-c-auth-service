@@ -14,11 +14,9 @@ import logger from "../config/logger";
 import authenticate from "../middlewares/authenticate";
 import { canAccess } from "../middlewares/canAccess";
 import { Roles } from "../constants";
-// import { canAccess } from "../middlewares/canAccess";
-// import { Roles } from "../constants";
-// import tenantValidator from "../validators/tenant-validator";
-// import { CreateTenantRequest } from "../types";
-// import listUsersValidator from "../validators/list-users-validator";
+import tenantValidator from "../validators/tenant-validator";
+import { CreateTenantRequest } from "../types";
+import listUsersValidator from "../validators/list-users-validator";
 
 const router = express.Router();
 
@@ -28,39 +26,50 @@ const tenantController = new TenantController(tenantService, logger);
 
 router.post(
   "/",
-  authenticate,
+  authenticate as RequestHandler,
   canAccess([Roles.ADMIN]),
-  // tenantValidator,
-  (req, res, next) => tenantController.create(req, res, next),
+  tenantValidator,
+  (req: CreateTenantRequest, res: Response, next: NextFunction) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    tenantController.create(req, res, next);
+  },
 );
 
-// router.patch(
-//   "/:id",
-//   authenticate as RequestHandler,
-//   canAccess([Roles.ADMIN]),
-//   tenantValidator,
-//   (req: CreateTenantRequest, res: Response, next: NextFunction) =>
-//     tenantController.update(req, res, next) as unknown as RequestHandler,
-// );
-// router.get(
-//   "/",
-//   listUsersValidator,
-//   (req: Request, res: Response, next: NextFunction) =>
-//     tenantController.getAll(req, res, next) as unknown as RequestHandler,
-// );
-// router.get(
-//   "/:id",
-//   authenticate as RequestHandler,
-//   canAccess([Roles.ADMIN]),
-//   (req, res, next) =>
-//     tenantController.getOne(req, res, next) as unknown as RequestHandler,
-// );
-// router.delete(
-//   "/:id",
-//   authenticate as RequestHandler,
-//   canAccess([Roles.ADMIN]),
-//   (req, res, next) =>
-//     tenantController.destroy(req, res, next) as unknown as RequestHandler,
-// );
+router.patch(
+  "/:id",
+  authenticate as RequestHandler,
+  canAccess([Roles.ADMIN]),
+  tenantValidator,
+  (req: CreateTenantRequest, res: Response, next: NextFunction) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    tenantController.update(req, res, next);
+  },
+);
+router.get(
+  "/",
+  listUsersValidator,
+  (req: Request, res: Response, next: NextFunction) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    tenantController.getAll(req, res, next);
+  },
+);
+router.get(
+  "/:id",
+  authenticate as RequestHandler,
+  canAccess([Roles.ADMIN]),
+  (req, res, next) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    tenantController.getOne(req, res, next);
+  },
+);
+router.delete(
+  "/:id",
+  authenticate as RequestHandler,
+  canAccess([Roles.ADMIN]),
+  (req, res, next) => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    tenantController.destroy(req, res, next);
+  },
+);
 
 export default router;
