@@ -1,13 +1,9 @@
-import { NextFunction, Request, Response } from "express";
-import { UserService } from "../services/UserService";
-import {
-  CreateUserRequest,
-  UpdateUserRequest,
-  UserQueryParams,
-} from "../types";
+import { NextFunction, Response } from "express";
+import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import { Logger } from "winston";
-import { matchedData, validationResult } from "express-validator";
+import { UserService } from "../services/UserService";
+import { CreateUserRequest, UpdateUserRequest } from "../types";
 
 export class UserController {
   constructor(

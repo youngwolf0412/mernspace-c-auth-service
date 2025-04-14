@@ -15,6 +15,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "cross-env NODE_ENV=dev nodemon src/server.ts",
+    "build": "tsc",
     "format:fix": "prettier . --write",
     "lint:check": "eslint .",
     "lint:fix": "eslint --fix .",
