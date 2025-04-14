@@ -4,9 +4,10 @@ import { JwtPayload } from "jsonwebtoken";
 import { Logger } from "winston";
 import { TokenService } from "../services/TokenService";
 import { UserService } from "../services/UserService";
-import { AuthRequest, LoginUserRequest, RegisterUserRequest } from "../types";
+import { AuthRequest, RegisterUserRequest } from "../types";
 import createHttpError from "http-errors";
 import { CredentialService } from "../services/CredentialService";
+import { Roles } from "../constants";
 
 export class AuthController {
   // userService is a property of the AuthController class
@@ -43,6 +44,7 @@ export class AuthController {
         lastName,
         email,
         password,
+        role: Roles.CUSTOMER,
       });
 
       this.logger.info("User registered successfully", { id: user.id });
@@ -83,7 +85,7 @@ export class AuthController {
     }
   }
 
-  async login(req: LoginUserRequest, res: Response, next: NextFunction) {
+  async login(req: RegisterUserRequest, res: Response, next: NextFunction) {
     const result = validationResult(req);
     // check if there are validation errors
     // if there are, return a 400 response with the errors

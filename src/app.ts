@@ -6,6 +6,7 @@ import logger from "./config/logger";
 import cookieParser from "cookie-parser";
 import authRouter from "./routes/auth";
 import tenantRouter from "./routes/tenant";
+import userRouter from "./routes/user";
 
 const app = express();
 app.use(express.static("public"));
@@ -24,6 +25,7 @@ app.get("/", (req, res, next) => {
 app.use("/auth", authRouter);
 
 app.use("/tenants", tenantRouter);
+app.use("/users", userRouter);
 
 // gloal error handler
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
