@@ -1,11 +1,10 @@
+import { Request } from "express";
 import { expressjwt } from "express-jwt";
 import { Config } from "../config";
-import { Request } from "express";
-import { AuthCookie, IRefreshTokenPayload } from "../types";
 import { AppDataSource } from "../config/data-source";
-import { RefreshToken } from "../entity/RefreshToken";
-import { Jwt } from "jsonwebtoken";
 import logger from "../config/logger";
+import { RefreshToken } from "../entity/RefreshToken";
+import { AuthCookie, IRefreshTokenPayload } from "../types";
 
 export default expressjwt({
   secret: Config.REFRESH_TOKEN_SECRET!,

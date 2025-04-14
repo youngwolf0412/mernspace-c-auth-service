@@ -12,7 +12,7 @@ import { AppDataSource } from "../config/data-source";
 import { User } from "../entity/User";
 import validateRefreshToken from "../middlewares/validateRefreshToken";
 
-import parseRefreshToken from "../controller/parseRefreshToken";
+import parseRefreshToken from "../middlewares/parseRefreshToken";
 
 const router = Router();
 // userService is an instance of UserService class
