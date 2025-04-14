@@ -11,7 +11,7 @@ import { AppDataSource } from "../config/data-source";
 
 import { Tenant } from "../entity/Tenant";
 import logger from "../config/logger";
-// import authenticate from "../middlewares/authenticate";
+import authenticate from "../middlewares/authenticate";
 // import { canAccess } from "../middlewares/canAccess";
 // import { Roles } from "../constants";
 // import tenantValidator from "../validators/tenant-validator";
@@ -26,7 +26,7 @@ const tenantController = new TenantController(tenantService, logger);
 
 router.post(
   "/",
-  // authenticate as RequestHandler,
+  authenticate,
   // canAccess([Roles.ADMIN]),
   // tenantValidator,
   (req, res, next) => tenantController.create(req, res, next),

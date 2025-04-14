@@ -156,7 +156,7 @@ export class AuthController {
     // console.log("self called", req.auth.sub);
 
     const user = await this.userService.findById(Number(req.auth.sub));
-    console.log("user data", user);
+    // console.log("user data", user);
 
     res.json({ ...user, password: undefined });
     // res.json({});
