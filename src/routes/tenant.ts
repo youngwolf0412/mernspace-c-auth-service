@@ -4,11 +4,13 @@ import express, {
   RequestHandler,
   Response,
 } from "express";
-// import { TenantController } from "../controllers/TenantController";
-// import { TenantService } from "../services/TenantService";
-// import { AppDataSource } from "../config/data-source";
-// import { Tenant } from "../entity/Tenant";
-// import logger from "../config/logger";
+
+import { TenantController } from "../controller/TenantController";
+import { TenantService } from "../services/TenantService";
+import { AppDataSource } from "../config/data-source";
+
+import { Tenant } from "../entity/Tenant";
+import logger from "../config/logger";
 // import authenticate from "../middlewares/authenticate";
 // import { canAccess } from "../middlewares/canAccess";
 // import { Roles } from "../constants";
@@ -18,18 +20,16 @@ import express, {
 
 const router = express.Router();
 
-// const tenantRepository = AppDataSource.getRepository(Tenant);
-// const tenantService = new TenantService(tenantRepository);
-// const tenantController = new TenantController(tenantService, logger);
+const tenantRepository = AppDataSource.getRepository(Tenant);
+const tenantService = new TenantService(tenantRepository);
+const tenantController = new TenantController(tenantService, logger);
 
 router.post(
   "/",
   // authenticate as RequestHandler,
   // canAccess([Roles.ADMIN]),
   // tenantValidator,
-  (req, res) => {
-    res.status(201).json({ message: "Tenant created successfully" });
-  },
+  (req, res, next) => tenantController.create(req, res, next),
 );
 
 // router.patch(

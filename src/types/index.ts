@@ -36,3 +36,18 @@ export interface AuthRequest extends Request {
 export interface IRefreshTokenPayload {
   id: string;
 }
+
+export interface ITenant {
+  name: string;
+  address: string;
+}
+
+export interface CreateTenantRequest extends Request {
+  body: ITenant;
+}
+
+export interface TenantQueryParams {
+  q: string;
+  perPage: number;
+  currentPage: number;
+}

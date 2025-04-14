@@ -49,23 +49,23 @@ describe("POST /tenants", () => {
       expect(response.statusCode).toBe(201);
     });
 
-    // it("should create a tenant in the database", async () => {
-    //   const tenantData = {
-    //     name: "Tenant name",
-    //     address: "Tenant address",
-    //   };
+    it("should create a tenant in the database", async () => {
+      const tenantData = {
+        name: "Tenant name",
+        address: "Tenant address",
+      };
 
-    //   await request(app)
-    //     .post("/tenants")
-    //     .set("Cookie", [`accessToken=${adminToken}`])
-    //     .send(tenantData);
+      await request(app)
+        .post("/tenants")
+        // .set("Cookie", [`accessToken=${adminToken}`])
+        .send(tenantData);
 
-    //   const tenantRepository = connection.getRepository(Tenant);
-    //   const tenants = await tenantRepository.find();
-    //   expect(tenants).toHaveLength(1);
-    //   expect(tenants[0].name).toBe(tenantData.name);
-    //   expect(tenants[0].address).toBe(tenantData.address);
-    // });
+      const tenantRepository = connection.getRepository(Tenant);
+      const tenants = await tenantRepository.find();
+      expect(tenants).toHaveLength(1);
+      expect(tenants[0].name).toBe(tenantData.name);
+      expect(tenants[0].address).toBe(tenantData.address);
+    });
 
     // it("should return 401 if user is not autheticated", async () => {
     //   const tenantData = {
