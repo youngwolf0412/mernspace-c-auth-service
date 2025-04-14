@@ -1,11 +1,11 @@
-import "reflect-metadata"; // We need this to use @decorators in TypeORM
 import express, { NextFunction, Request, Response } from "express";
-import createHttpError, { HttpError } from "http-errors";
+import { HttpError } from "http-errors";
+import "reflect-metadata"; // We need this to use @decorators in TypeORM
 import logger from "./config/logger";
 
-import authRouter from "./routes/auth";
-import { cookie } from "express-validator";
 import cookieParser from "cookie-parser";
+import authRouter from "./routes/auth";
+import tenantRouter from "./routes/tenant";
 
 const app = express();
 app.use(express.static("public"));
@@ -22,6 +22,8 @@ app.get("/", (req, res, next) => {
 
 // saaari baat abhi iss route pe kya hoga vo kaam kar rha hu
 app.use("/auth", authRouter);
+
+app.use("/tenants", tenantRouter);
 
 // gloal error handler
 app.use((err: HttpError, req: Request, res: Response, next: NextFunction) => {
