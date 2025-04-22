@@ -4,6 +4,8 @@ import jwksClient from "jwks-rsa";
 import { Config } from "../config";
 import { AuthCookie } from "../types";
 
+// expressjwt token ko verify karega or request me auth object add karega
+// agar token valid hai to
 export default expressjwt({
   // jwksClient to get the public key from the JWKS endpoint
   secret: jwksClient.expressJwtSecret({

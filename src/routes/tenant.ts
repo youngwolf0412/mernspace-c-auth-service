@@ -27,7 +27,7 @@ const tenantController = new TenantController(tenantService, logger);
 router.post(
   "/",
   authenticate as RequestHandler,
-  canAccess([Roles.ADMIN]),
+  // canAccess([Roles.ADMIN]),
   tenantValidator,
   (req: CreateTenantRequest, res: Response, next: NextFunction) => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises

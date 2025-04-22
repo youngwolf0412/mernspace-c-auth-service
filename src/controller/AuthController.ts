@@ -101,7 +101,7 @@ export class AuthController {
 
     try {
       // check if email exists in the database
-      const user = await this.userService.findByEmail(email);
+      const user = await this.userService.findByEmailWithPassword(email);
       if (!user) {
         const error = createHttpError(400, "Email or password not match");
         next(error);
@@ -117,11 +117,12 @@ export class AuthController {
         next(error);
         return;
       }
-
+      // console.log("user", user);
       // generate access token and refresh token
       const payload: JwtPayload = {
         sub: String(user.id),
         role: user.role,
+        tenant: user.tenant ? String(user.tenant.id) : "",
       };
 
       const accessToken = this.tokenService.generateAccessToken(payload);
@@ -169,6 +170,7 @@ export class AuthController {
       const payload: JwtPayload = {
         sub: req.auth.sub,
         role: req.auth.role,
+        tenant: req.auth.tenant,
       };
 
       const accessToken = this.tokenService.generateAccessToken(payload);

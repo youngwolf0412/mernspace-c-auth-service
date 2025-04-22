@@ -24,7 +24,7 @@ const userController = new UserController(userService, logger);
 router.post(
   "/",
   authenticate as RequestHandler,
-  canAccess([Roles.ADMIN]),
+  // canAccess([Roles.ADMIN]),
   createUserValidator,
   (req: CreateUserRequest, res: Response, next: NextFunction) => {
     userController.create(req, res, next);
@@ -41,22 +41,22 @@ router.patch(
   },
 );
 
-// router.get(
-//   "/",
-//   authenticate as RequestHandler,
-//   canAccess([Roles.ADMIN]),
-//   listUsersValidator,
-//   (req: Request, res: Response, next: NextFunction) => {
-//     userController.getAll(req, res, next);
-//   },
-// );
+router.get(
+  "/",
+  authenticate as RequestHandler,
+
+  listUsersValidator,
+  (req: Request, res: Response, next: NextFunction) => {
+    userController.getAll(req, res, next);
+  },
+);
 
 // router.get(
-//     "/:id",
-//     authenticate as RequestHandler,
-//     canAccess([Roles.ADMIN]),
-//     (req, res, next) =>
-//         userController.getOne(req, res, next) as unknown as RequestHandler,
+//   "/:id",
+//   authenticate as RequestHandler,
+//   canAccess([Roles.ADMIN]),
+//   (req, res, next) =>
+//     userController.getOne(req, res, next) as unknown as RequestHandler,
 // );
 
 // router.delete(

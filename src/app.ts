@@ -10,7 +10,12 @@ import userRouter from "./routes/user";
 import cors from "cors";
 
 const app = express();
-app.use(cors({ origin: ["http://localhost:5173"], credentials: true })); // Middleware to enable CORS
+app.use(
+  cors({
+    origin: ["http://localhost:5173"],
+    credentials: true,
+  }),
+); // Middleware to enable CORS
 app.use(express.static("public"));
 
 app.use(cookieParser()); // Middleware to parse cookies
